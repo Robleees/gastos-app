@@ -81,13 +81,37 @@ def ver_total():
         porcentaje = (monto / total) * 100
         print(f"  {cat}: ${monto:.2f} ({porcentaje:.1f}%)")
 
+def filtrar_por_categoria():
+    """Muestra los gastos de una categoría específica."""
+    gastos = cargar_gastos()
+    
+    if not gastos:
+        print("\n📭 No hay gastos registrados.")
+        return
+    
+    categoria = input("¿Qué categoría quieres ver? ").strip().lower()
+    filtrados = [g for g in gastos if g["categoria"] == categoria]
+    
+    if not filtrados:
+        print(f"\n❌ No hay gastos en la categoría '{categoria}'.")
+        return
+    
+    print(f"\n--- GASTOS EN '{categoria.upper()}' ---")
+    total = 0
+    for g in filtrados:
+        print(f"[{g['fecha']}] {g['descripcion']} - ${g['monto']:.2f}")
+        total += g["monto"]
+    print(f"\n💰 Total en {categoria}: ${total:.2f}")
+    
+     
 def menu():
     while True:
         print("\n====== APP DE GASTOS ======")
         print("1. Registrar gasto")
         print("2. Ver todos los gastos")
         print("3. Ver total y desglose")
-        print("4. Salir")
+        print("4. Filtrar por categoría:")
+        print("5. Salir")
         opcion = input("Elige una opción: ").strip()
         
         if opcion == "1":
@@ -97,6 +121,8 @@ def menu():
         elif opcion == "3":
             ver_total()
         elif opcion == "4":
+            filtrar_por_categoria()
+        elif opcion == "5":
             print("¡Hasta luego!")
             break
         else:
